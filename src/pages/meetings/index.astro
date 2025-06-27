@@ -1,0 +1,10 @@
+---
+import "../../styles/global.css"
+import LiveMeeting from "../../components/classes/LiveMeeting.vue"
+const { id } = Astro.params;
+
+---
+
+<main>
+    <LiveMeeting client:load meetingId={id}/>
+</main>

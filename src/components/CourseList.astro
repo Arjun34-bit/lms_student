@@ -1,0 +1,44 @@
+---
+// src/pages/courses.astro
+import CourseCard from '../components/CourseCard.vue';
+
+const courses = [
+  {
+    id: 1,
+    title: 'Introduction to Web Development',
+    description: 'Learn the basics of HTML, CSS, and JavaScript.',
+    instructor: 'John Doe',
+    price: 19.99,
+  },
+  {
+    id: 2,
+    title: 'Advanced JavaScript',
+    description: 'Deep dive into modern JavaScript concepts and frameworks.',
+    instructor: 'Jane Smith',
+    price: 29.99,
+  },
+  {
+    id: 3,
+    title: 'Vue.js for Beginners',
+    description: 'Get started with the Vue.js framework.',
+    instructor: 'Alice Johnson',
+    price: 24.99,
+  },
+  {
+    id: 4,
+    title: 'Svelte.js Fundamentals',
+    description: 'Understand the core concepts of Svelte.js.',
+    instructor: 'Bob Williams',
+    price: 24.99,
+  },
+];
+---
+
+<section class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6 text-center">Tech Courses</h1>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {courses.map(course => (
+      <CourseCard course={course} client:load key={course.id} />
+    ))}
+  </div>
+</section>

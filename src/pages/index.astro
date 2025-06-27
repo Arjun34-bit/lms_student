@@ -1,12 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import CourseList from '../components/CourseList.svelte';
+import CourseList from '../components/CourseList.astro';
+import "../styles/global.css";
+import Carousel from "../miscellenous/Carousel.svelte"
+
 ---
 
-<Layout title="PCC Student">
-	<main>
-		<h1>Welcome to PCC Student!</h1>
-		<p>Explore our courses:</p>
-		<CourseList client:load />
-	</main>
+<Layout title="PCC Student" >
+  <main>
+    <!-- <h1>Welcome to PCC Student!</h1> -->
+    <Carousel client:load/> 
+    
+    <!-- <p>Explore our courses:</p> -->
+    <CourseList />
+  </main>
 </Layout>

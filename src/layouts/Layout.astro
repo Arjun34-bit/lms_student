@@ -1,22 +1,78 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import NavBar from '../miscellenous/NavBar.svelte';
+const { title = 'PCC Student' } = Astro.props;
+---
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+<html lang="en">
+  <head>
+    <title>{title}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/globals.css" />
+  </head>
+  <body class="font-sans text-gray-800">
+
+    <!-- Header Alert (Dismissible) -->
+    <div id="course-banner" class="bg-blue-100 text-blue-800 text-sm px-4 py-3 flex justify-between items-center hidden">
+      <span>🎉 New Batch Starts July 1st – Enroll Now & Get 20% Off!</span>
+      <button onclick="document.getElementById('course-banner').style.display='none'" class="text-xl font-bold">&times;</button>
+    </div>
+
+    <!-- NavBar from Svelte -->
+    <NavBar client:load />
+
+    <main class="min-h-screen px-4 py-8">
+      <slot />
+    </main>
+
+    <footer class="bg-gray-100 border-t mt-12 py-8 px-4 text-sm text-gray-600">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div>
+          <h2 class="font-semibold mb-2">PerfectCoachingCenter</h2>
+          <p>Empowering students through affordable and quality online education.</p>
+        </div>
+
+        <div>
+          <h3 class="font-semibold mb-2">Courses</h3>
+          <ul class="space-y-1">
+            <li><a href="/courses/web-development" class="hover:text-blue-600">Web Development</a></li>
+            <li><a href="/courses/data-science" class="hover:text-blue-600">Data Science</a></li>
+            <li><a href="/courses/ai-ml" class="hover:text-blue-600">AI / ML</a></li>
+            <li><a href="/courses/upcoming" class="hover:text-blue-600">Upcoming Courses</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold mb-2">Resources</h3>
+          <ul class="space-y-1">
+            <li><a href="/faq" class="hover:text-blue-600">FAQ</a></li>
+            <li><a href="/support" class="hover:text-blue-600">Support</a></li>
+            <li><a href="/terms" class="hover:text-blue-600">Terms of Use</a></li>
+            <li><a href="/privacy" class="hover:text-blue-600">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold mb-2">Connect</h3>
+          <ul class="space-y-1">
+            <li><a href="mailto:support@pcc.com" class="hover:text-blue-600">support@pcc.com</a></li>
+            <li><a href="#" class="hover:text-blue-600">LinkedIn</a></li>
+            <li><a href="#" class="hover:text-blue-600">Instagram</a></li>
+            <li><a href="#" class="hover:text-blue-600">Twitter</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="text-center text-xs text-gray-500 mt-8">
+        © 2025 PerfectCoachingCenter. All rights reserved.
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const banner = document.getElementById("course-banner");
+        if (banner) banner.classList.remove("hidden");
+      });
+    </script>
+  </body>
+</html>
