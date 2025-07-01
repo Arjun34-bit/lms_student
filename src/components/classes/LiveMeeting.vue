@@ -20,6 +20,12 @@
         muted
         playsinline
       ></video>
+
+      <!-- Remote Streams -->
+      <div
+        id="remote-streams"
+        class="absolute top-4 left-4 flex gap-2 flex-wrap"
+      ></div>
     </div>
 
     <!-- Control Buttons -->
@@ -51,99 +57,143 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { sharedState } from "../../store/store";
+import { ref, onMounted, watch } from "vue";
+import { io } from "socket.io-client";
+import { Device } from "mediasoup-client";
 
 export default {
   name: "MeetView",
   setup() {
     const myVideo = ref(null);
-    const stream = ref(null);
     const cameraEnabled = ref(false);
     const micEnabled = ref(false);
-
+    const stream = ref(null);
     const socket = ref(null);
-    const viewerCount = ref(0);
-    const rtpCapabilities = ref(null);
-    const classId = sharedState.classID;
-    const userName = sharedState.userName;
-    console.log(sharedState.userName);
+    const device = ref(null);
+    const consumerTransport = ref(null);
+    const producerTransport = ref(null);
+    const producers = ref([]);
 
-    onMounted(() => {
-      console.log("Initializing Socket.IO connection");
+    const classId = "room-xyz"; // replace with dynamic value
+    const userName = "student-abc"; // replace with dynamic value
 
-      socket.value = io(import.meta.env.MEDIASOUP_SOCKET_URL); // from env file
+    const createDevice = async (rtpCapabilities) => {
+      const dev = new Device();
+      await dev.load({ routerRtpCapabilities: rtpCapabilities });
+      device.value = dev;
+    };
 
-      console.log("Socket.IO instance created:", socket.value);
-
-      socket.value.on("connection-success", (data) => {
-        console.log("Received connection-success:", data);
-
-        //Joining Room
+    const createRecvTransport = () => {
+      return new Promise((resolve, reject) => {
         socket.value.emit(
-          "join-room",
-          { roomId: classId, userName: userName, role: "student" },
-          (data) => {
-            console.log("Join room response:", data);
-            if (data?.rtpCapabilities) {
-              rtpCapabilities.value = data.rtpCapabilities;
-            } else {
-              console.error("Failed to get RTP Capabilities");
-            }
+          "createTransport",
+          { roomId: classId, sender: false },
+          async ({ params }) => {
+            if (params.error) return reject(params.error);
+
+            const transport = device.value.createRecvTransport(params);
+
+            transport.on("connect", ({ dtlsParameters }, callback, errback) => {
+              socket.value.emit(
+                "connectConsumerTransport",
+                { roomId: classId, dtlsParameters },
+                ({ error }) => {
+                  if (error) return errback(error);
+                  callback();
+                }
+              );
+            });
+
+            consumerTransport.value = transport;
+            resolve(transport);
           }
         );
-
-        //getting joined user information
-        socket.value.on("user-joined", ({ message, userName }) => {
-          console.log(message);
-          console.log(`${userName} joined`);
-        });
       });
-    });
+    };
 
-    const startMedia = async () => {
-      try {
-        stream.value = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
-        });
+    const consumeStream = async (producerId) => {
+      const transport =
+        consumerTransport.value || (await createRecvTransport());
 
-        if (myVideo.value) {
-          myVideo.value.srcObject = stream.value;
+      socket.value.emit(
+        "consumeMedia",
+        {
+          roomId: classId,
+          rtpCapabilities: device.value.rtpCapabilities,
+          producerId,
+        },
+        async ({ params }) => {
+          if (!params || params.error) return;
+
+          const consumer = await transport.consume({
+            id: params.id,
+            producerId: params.producerId,
+            kind: params.kind,
+            rtpParameters: params.rtpParameters,
+          });
+
+          const stream = new MediaStream([consumer.track]);
+
+          const video = document.createElement("video");
+          video.srcObject = stream;
+          video.autoplay = true;
+          video.playsInline = true;
+          video.className = "w-40 h-28 rounded border-2 border-white";
+          document.getElementById("remote-streams").appendChild(video);
         }
+      );
+    };
 
-        cameraEnabled.value = true;
-        micEnabled.value = true;
-      } catch (err) {
-        console.error("Media access error:", err);
-        alert("Could not access camera/microphone.");
-      }
+    const startStream = async () => {
+      stream.value = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      myVideo.value.srcObject = stream.value;
+      cameraEnabled.value = true;
+      micEnabled.value = true;
+
+      // TODO: add producer code to publish own stream here if needed
     };
 
     const toggleCamera = () => {
-      if (!stream.value) return startMedia();
-
+      if (!stream.value) return startStream();
       const videoTrack = stream.value.getVideoTracks()[0];
       videoTrack.enabled = !videoTrack.enabled;
       cameraEnabled.value = videoTrack.enabled;
     };
 
     const toggleMic = () => {
-      if (!stream.value) return startMedia();
-
+      if (!stream.value) return;
       const audioTrack = stream.value.getAudioTracks()[0];
       audioTrack.enabled = !audioTrack.enabled;
       micEnabled.value = audioTrack.enabled;
     };
 
     const endCall = () => {
-      if (stream.value) {
-        stream.value.getTracks().forEach((track) => track.stop());
-        stream.value = null;
-        cameraEnabled.value = false;
-        micEnabled.value = false;
-      }
+      stream.value?.getTracks().forEach((track) => track.stop());
+      stream.value = null;
+      cameraEnabled.value = false;
+      micEnabled.value = false;
     };
+
+    onMounted(() => {
+      socket.value = io(import.meta.env.PUBLIC_MEDIASOUP_SOCKET_URL);
+
+      socket.value.on("connection-success", async ({ rtpCapabilities }) => {
+        await createDevice(rtpCapabilities);
+      });
+
+      socket.value.emit("join-room", {
+        roomId: classId,
+        userName,
+        role: "student",
+      });
+
+      socket.value.on("new-producer", async ({ producerId }) => {
+        await consumeStream(producerId);
+      });
+    });
 
     return {
       myVideo,

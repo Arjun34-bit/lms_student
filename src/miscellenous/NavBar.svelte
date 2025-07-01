@@ -28,6 +28,9 @@
 
   const logout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem("token")
+    localStorage.removeItem("meetingDetails")
+    localStorage.removeItem("meetingId")
     window.location.href = '/';
   };
 </script>
@@ -35,7 +38,7 @@
 <nav class="bg-white border-b border-gray-200 px-4 py-3 md:px-16 md:py-6 shadow-sm">
   <div class="flex items-center justify-between">
     <!-- Logo -->
-    <div class="text-xl font-bold text-blue-600">
+    <div type="button" class="text-xl font-bold text-blue-600 cursor-pointer" on:click={() => window.location.href="/"}>
       PerfectCoachingCenter
     </div>
 
@@ -48,7 +51,7 @@
       />
 
       <div class="flex items-center gap-3">
-        <span>Courses</span>
+        <button type="button"  on:click={() => window.location.href="/courses"} class="cursor-pointer">Courses</button>
         <span>Pricing</span>
         {#if user}
             <button class="w-fit p-2 border border-blue-300 rounded-lg font-semibold hover:bg-gray-100" on:click={() => window.location.href = '/live-classes'}>My Classroom</button>

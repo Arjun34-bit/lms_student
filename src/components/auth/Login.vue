@@ -50,6 +50,30 @@
           >Sign Up</a
         >
       </div>
+      <hr />
+      <div class="mt-2 flex justify-center items center gap-2">
+        <button
+          type="button"
+          class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow transform transition duration-200 hover:scale-105"
+          @click="handleGoogleLogin"
+        >
+          <i class="pi pi-google text-xl text-red-600"></i>
+        </button>
+
+        <button
+          type="button"
+          class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow transform transition duration-200 hover:scale-105"
+          @click="handleFacebookLogin"
+        >
+          <i class="pi pi-facebook text-xl text-blue-600"></i>
+        </button>
+      </div>
+      <div class="flex flex-col items-center mt-2">
+        <span class="text-center">OR</span>
+        <span @click="goToPhoneLogin" class="cursor-pointer font-semibold mt-2"
+          >Login With Phone Number</span
+        >
+      </div>
     </Form>
   </div>
 </template>
@@ -58,15 +82,22 @@
 import { ref } from "vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { loginSchema } from "./schema/auth";
-import { authLoginApi } from "../../api/queries/authQueries";
+import { authLoginApi, googleSigninApi } from "../../api/queries/authQueries";
 // import { useRouter } from "vue-router";
 import { setItem } from "../../utils/localStorageUtils.js";
+import { signInWithGoogle } from "../../config/firebaseConfig.js";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/config.js";
 
 // const router = useRouter();
 
 const loading = ref(false);
 const submitError = ref("");
 const remember = ref(false);
+
+const goToPhoneLogin = () => {
+  window.location.href = "/auth/phone-signon";
+};
 
 const onSubmit = async (values) => {
   submitError.value = "";
@@ -87,4 +118,30 @@ const onSubmit = async (values) => {
       : "Unexpected error occurred.";
   }
 };
+
+let signingIn = false;
+
+const handleGoogleLogin = async () => {
+  console.log("Google");
+  if (signingIn) return;
+  signingIn = true;
+  try {
+    await signOut(auth);
+    const userCredential = await signInWithGoogle();
+    const idToken = await userCredential.getIdToken();
+    const loginResponse = await googleSigninApi(idToken);
+    if (loginResponse?.data?.access_token && loginResponse?.data?.user) {
+      setItem("token", loginResponse?.data?.access_token);
+      setItem("user", loginResponse?.data?.user);
+      setTimeout(() => (window.location.href = "/"), 2000);
+    }
+  } catch (err) {
+    console.log(err);
+    submitError.value = err?.response?.data
+      ? err.response.data?.message || "Something went wrong."
+      : "Unexpected error occurred.";
+  }
+};
+
+const handleFacebookLogin = () => {};
 </script>

@@ -23,3 +23,18 @@ export const registerSchema = yup.object({
     .min(6, "Password must be at least 6 characters")
     .required("Password is required"),
 });
+
+export const phoneLoginSchema = yup.object({
+  phone: yup
+    .string()
+    .required("Phone number is required")
+    .matches(/^(?:\+91|0)?[6-9]\d{9}$/, "Enter a valid Indian phone number"),
+});
+
+export const phoneLoginOtpSchema = yup.object({
+  country: yup.string().required(),
+  otp: yup
+    .string()
+    .required("OTP is required")
+    .matches(/^\d{6}$/, "Enter a valid 6-digit OTP"),
+});
