@@ -1,0 +1,12 @@
+---
+import "../../styles/global.css";
+import Layout from '../../layouts/Layout.astro';
+import MyCoursePage from "../../components/courses/myCourse.vue"
+
+---
+
+<Layout title="PCC Student" >
+  <main>
+    <MyCoursePage  client:load/>
+  </main>
+</Layout>

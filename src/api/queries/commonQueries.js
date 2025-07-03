@@ -19,6 +19,11 @@ export const fetchSubjectsApi = async ({ departmentId }) => {
   return data;
 };
 
+export const fetchAllCategoriesApi = async () => {
+  const { data } = await axiosClient.get(`${apiBaseUrl}/common/categories`);
+  return data;
+};
+
 export const fetchImageApi = async (thumbnailId) => {
   const response = await axiosClient.get(
     `${apiBaseUrl}/common/image?fileId=${thumbnailId}`,
@@ -26,6 +31,5 @@ export const fetchImageApi = async (thumbnailId) => {
       responseType: "blob",
     }
   );
-  console.log(response?.config?.url);
   return response?.config?.url;
 };

@@ -30,27 +30,37 @@
 import { ref, onMounted } from "vue";
 import CourseCard from "./CourseCard.vue";
 import { getAllCourseApi } from "../../api/queries/courseQueries";
+import { fetchAllCategoriesApi } from "../../api/queries/commonQueries";
 
 const error = ref(null);
 
-const categories = [
-  { id: "cat1", name: "Development" },
-  { id: "cat2", name: "Design" },
-  { id: "cat3", name: "Marketing" },
-  { id: "cat4", name: "AI & ML" },
-  { id: "cat5", name: "Cybersecurity" },
-];
+// const categories = [
+//   { id: "cat1", name: "Development" },
+//   { id: "cat2", name: "Design" },
+//   { id: "cat3", name: "Marketing" },
+//   { id: "cat4", name: "AI & ML" },
+//   { id: "cat5", name: "Cybersecurity" },
+// ];
 
-const activeCategory = ref(categories[0].id);
+const categories = ref([]);
+
+const activeCategory = ref();
 const courses = ref([]);
 const loading = ref(false);
+
+onMounted(async () => {
+  try {
+    const data = await fetchAllCategoriesApi();
+    categories.value = data?.data;
+  } catch (error) {
+    console.error("Failed to fetch categories:", error);
+  }
+});
 
 const fetchCourses = async () => {
   loading.value = true;
   try {
     const res = await getAllCourseApi();
-    console.log(res);
-    // const json = await res.json();
 
     courses.value = res?.data;
   } catch (error) {

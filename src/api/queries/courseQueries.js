@@ -27,3 +27,28 @@ export const buyCourseApi = async (courseId) => {
 
   return response.data;
 };
+
+export const getEnrolledCourse = async () => {
+  const response = await axiosClient.get(
+    `${apiBaseUrl}/student/enrolled-course`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const getCourseByIdApi = async (id) => {
+  const response = await axiosClient.get(
+    `${apiBaseUrl}/student/course/course-detail`,
+    {
+      params: {
+        courseId: id,
+      },
+    }
+  );
+  return response;
+};

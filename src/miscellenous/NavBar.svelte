@@ -38,9 +38,10 @@
 <nav class="bg-white border-b border-gray-200 px-4 py-3 md:px-16 md:py-6 shadow-sm">
   <div class="flex items-center justify-between">
     <!-- Logo -->
-    <div type="button" class="text-xl font-bold text-blue-600 cursor-pointer" on:click={() => window.location.href="/"}>
+    <button type="button" class="text-xl font-bold text-blue-600 cursor-pointer" on:click={() => window.location.href="/"} on:keydown={(e) => e.key === '' && (window.location.href = "/")}>
       PerfectCoachingCenter
-    </div>
+      </button>
+    <!-- </div> -->
 
     <!-- Desktop Navigation -->
     <div class="hidden md:flex items-center gap-4 flex-1 justify-end">
@@ -73,7 +74,7 @@
 
           {#if showDropdown}
             <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50">
-              <a href="/my-courses" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Courses</a>
+              <a href="/courses/my-courses" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Courses</a>
               <a href="/cart" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Cart</a>
               <a href="/live-classes" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Live Classes</a>
               <button on:click={logout} class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">Logout</button>

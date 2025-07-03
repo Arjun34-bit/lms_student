@@ -1,6 +1,7 @@
 <template>
   <div
     class="bg-white shadow-md rounded-lg overflow-hidden w-full flex flex-col sm:flex-row"
+    @click="goToCourseDetails(course?.id)"
   >
     <!-- Thumbnail -->
     <img
@@ -34,12 +35,24 @@
       <!-- Price & Enroll Button -->
       <div class="mt-4 flex items-center justify-between">
         <p class="text-blue-600 font-bold text-sm">₹{{ course.price }}</p>
-        <button
-          class="px-4 py-1 bg-blue-600 text-white rounded w-fit hover:bg-blue-700 text-sm"
-          @click="buyCourse(course.id)"
-        >
-          Enroll Now
-        </button>
+        <p v-if="userDetails" role="button">
+          <button
+            :disabled="loading"
+            class="px-4 py-1 bg-blue-600 text-white rounded w-fit hover:bg-blue-700 text-sm disabled:opacity-50 cursor-pointer"
+            @click.stop="buyCourse(course.id)"
+          >
+            {{ loading ? "Processing..." : "Enroll Now" }}
+          </button>
+        </p>
+
+        <p v-else role="button">
+          <button
+            class="px-4 py-1 bg-gray-300 text-gray-800 rounded w-fit hover:bg-gray-400 text-sm"
+            @click.stop="redirectToLogin"
+          >
+            log in to Enroll
+          </button>
+        </p>
       </div>
     </div>
   </div>
@@ -53,6 +66,8 @@ import {
   fetchSubjectsApi,
 } from "../../api/queries/commonQueries";
 import { buyCourseApi } from "../../api/queries/courseQueries";
+import { getItem } from "../../utils/localStorageUtils";
+import { razorpayKey, verifyURL } from "../../constants/constants";
 
 const props = defineProps({
   course: {
@@ -65,10 +80,17 @@ const thumbnailSrc = ref("");
 const defaultThumbnail = "https://via.placeholder.com/150?text=Course+Image";
 const depName = ref("");
 const catName = ref("");
+const userDetails = ref("");
 const loading = ref(false);
+
+const redirectToLogin = () => {
+  window.location.href = "/auth/login";
+};
 
 onMounted(async () => {
   try {
+    userDetails.value = getItem("user");
+
     const departmentsRes = await fetchDepartmentsApi();
     const department = departmentsRes?.data?.find(
       (d) => d.id === props.course.departmentId
@@ -99,16 +121,68 @@ onMounted(async () => {
   }
 });
 
+const goToCourseDetails = (courseId) => {
+  window.location.href = `/courses/${courseId}`;
+};
+
 const buyCourse = async (courseId) => {
+  loading.value = true;
+
   try {
-    loading.value = true;
-    const res = await buyCourseApi(courseId);
-    console.log(res);
-    loading.value = false;
+    const response = await buyCourseApi(courseId);
+    const { order, courseBuy } = response?.data;
+
+    if (!order?.id || !courseBuy?.id) {
+      throw new Error("Invalid response from server. Cannot proceed.");
+    }
+
+    const razorpayOptions = {
+      key: razorpayKey,
+      amount: order.amount,
+      currency: order.currency,
+      name: "PCC",
+      description: "Course Enrollment",
+      order_id: order.id,
+
+      handler: async ({ razorpay_payment_id, razorpay_order_id }) => {
+        try {
+          await fetch(verifyURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              razorpay_payment_id,
+              razorpay_order_id,
+            }),
+          });
+
+          alert("✅ Payment successful! You are now enrolled in the course.");
+          window.location.reload();
+        } catch (verificationError) {
+          console.error("Payment verification failed:", verificationError);
+          alert("❌ Payment was processed, but verification failed.");
+        }
+      },
+
+      prefill: {
+        name: userDetails.value?.name || "Student",
+        email: userDetails.value?.email || "student@example.com",
+      },
+
+      theme: {
+        color: "#3B82F6",
+      },
+    };
+
+    const razorpay = new window.Razorpay(razorpayOptions);
+    razorpay.open();
   } catch (error) {
+    console.error("Failed to initiate course enrollment:", error);
+    alert(
+      error?.response?.data?.message ||
+        "Something went wrong. Please try again."
+    );
+  } finally {
     loading.value = false;
-    console.log(error);
-    alert(error?.response?.data?.message || "Failed to enroll course");
   }
 };
 </script>
