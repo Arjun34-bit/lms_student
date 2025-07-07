@@ -41,12 +41,32 @@ export const getEnrolledCourse = async () => {
   return response.data;
 };
 
-export const getCourseByIdApi = async (id) => {
+export const getCourseByIdApi = async (id, limit = 10, pageNumber = 1) => {
   const response = await axiosClient.get(
     `${apiBaseUrl}/student/course/course-detail`,
     {
       params: {
         courseId: id,
+        limit,
+        pageNumber,
+      },
+    }
+  );
+  return response;
+};
+
+export const getCourseByCategoryApi = async (
+  id,
+  limit = 10,
+  pageNumber = 1
+) => {
+  const response = await axiosClient.get(
+    `${apiBaseUrl}/student/course/by-category`,
+    {
+      params: {
+        categoryId: id,
+        limit,
+        pageNumber,
       },
     }
   );

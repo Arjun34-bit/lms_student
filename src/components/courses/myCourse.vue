@@ -11,7 +11,7 @@
         class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col sm:flex-row"
       >
         <img
-          :src="thumbnails[enrolled.course.thumbnailId] || defaultThumbnail"
+          :src="enrolled.course.thumbnailUrl || defaultThumbnail"
           alt="Course Thumbnail"
           class="w-full sm:w-40 h-40 object-cover"
         />
@@ -59,11 +59,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import {
-  fetchDepartmentsApi,
-  fetchSubjectsApi,
-  fetchImageApi,
-} from "../../api/queries/commonQueries";
+import { fetchDepartmentsApi } from "../../api/queries/commonQueries";
 import { getEnrolledCourse } from "../../api/queries/courseQueries";
 import { getItem } from "../../utils/localStorageUtils";
 
@@ -73,7 +69,8 @@ const departmentNames = ref({});
 const subjectNames = ref({});
 const thumbnails = ref({});
 const loading = ref(true);
-const defaultThumbnail = "https://via.placeholder.com/150?text=Course+Image";
+const defaultThumbnail =
+  "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png";
 
 const formatDate = (dateStr) =>
   new Date(dateStr).toLocaleDateString("en-IN", {
@@ -88,16 +85,12 @@ onMounted(async () => {
     if (!userDetails.value) return;
 
     const res = await getEnrolledCourse();
-    courses.value = res?.data || [];
+    courses.value = res?.data?.enrolledCourse || [];
 
     if (!courses.value.length) return;
 
     const depIds = [
       ...new Set(courses.value.map((c) => c.course.departmentId)),
-    ];
-    // const subIds = [...new Set(courses.value.map((c) => c.course.subjectId))];
-    const thumbIds = [
-      ...new Set(courses.value.map((c) => c.course.thumbnailId)),
     ];
 
     const departmentsRes = await fetchDepartmentsApi();
@@ -106,26 +99,10 @@ onMounted(async () => {
         departmentNames.value[dep.id] = dep.name;
       }
     });
-
-    // const subjectsRes = await fetchSubjectsApi();
-    // subjectsRes?.data?.forEach((sub) => {
-    //   if (subIds.includes(sub.id)) {
-    //     subjectNames.value[sub.id] = sub.name;
-    //   }
-    // });
-
-    for (const tid of thumbIds) {
-      try {
-        const img = await fetchImageApi(tid);
-        thumbnails.value[tid] = img;
-      } catch {
-        thumbnails.value[tid] = defaultThumbnail;
-      }
-    }
   } catch (err) {
     console.error("Error loading My Courses page:", err);
   } finally {
-    loading.value = false; // ✅ Done loading
+    loading.value = false;
   }
 });
 </script>

@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import "../../styles/global.css";
+import { getAllCourseApi } from "../../api/queries/courseQueries";
+import Order from '../../components/checkout/Order.vue';
+
+const { courseId } = Astro.params;
+
+if (!courseId) {
+  throw new Error("Missing courseId in URL");
+}
+
+
+export async function getStaticPaths() {
+  const res = await getAllCourseApi(); 
+  const courses = res?.data || [];
+
+  return courses.map((course: { id: string }) => ({
+    params: { courseId: course.id },
+    props: { course }, 
+  }));
+}
+
+
+---
+
+<Layout title="PCC Student" >
+  <main>
+    <Order courseId={courseId} client:load />
+  </main>
+</Layout>

@@ -16,6 +16,26 @@
       </button>
     </div>
 
+    <div class="flex justify-between items-center mb-4">
+      <div class="text-gray-600">Page {{ pageNumber }} of {{ totalPages }}</div>
+      <div class="space-x-2">
+        <button
+          class="px-3 py-1 border rounded text-sm"
+          :disabled="pageNumber === 1"
+          @click="changePage(pageNumber - 1)"
+        >
+          Prev
+        </button>
+        <button
+          class="px-3 py-1 border rounded text-sm"
+          :disabled="pageNumber === totalPages"
+          @click="changePage(pageNumber + 1)"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+
     <div v-if="loading" class="text-center text-gray-500">Loading...</div>
     <div
       v-else
@@ -29,24 +49,22 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import CourseCard from "./CourseCard.vue";
-import { getAllCourseApi } from "../../api/queries/courseQueries";
+import {
+  getAllCourseApi,
+  getCourseByCategoryApi,
+} from "../../api/queries/courseQueries";
 import { fetchAllCategoriesApi } from "../../api/queries/commonQueries";
 
 const error = ref(null);
-
-// const categories = [
-//   { id: "cat1", name: "Development" },
-//   { id: "cat2", name: "Design" },
-//   { id: "cat3", name: "Marketing" },
-//   { id: "cat4", name: "AI & ML" },
-//   { id: "cat5", name: "Cybersecurity" },
-// ];
 
 const categories = ref([]);
 
 const activeCategory = ref();
 const courses = ref([]);
 const loading = ref(false);
+const pageNumber = ref(1);
+const limit = ref(10);
+const totalPages = ref(1);
 
 onMounted(async () => {
   try {
@@ -71,9 +89,11 @@ const fetchCourses = async () => {
   }
 };
 
-const selectCategory = (id) => {
+const selectCategory = async (id) => {
   activeCategory.value = id;
-  fetchCourses(id);
+  courses.value = "";
+  const res = await getCourseByCategoryApi(id);
+  courses.value = res?.data?.data?.courses;
 };
 
 onMounted(() => {
