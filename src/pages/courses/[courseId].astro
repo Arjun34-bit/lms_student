@@ -12,15 +12,16 @@ if (!courseId) {
 }
 
 
-export async function getStaticPaths() {
-  const res = await getAllCourseApi(); 
-  const courses = res?.data || [];
+export const prerender = false;
+// export async function getStaticPaths() {
+//   const res = await getAllCourseApi(); 
+//   const courses = res?.data || [];
 
-  return courses.map((course: { id: string }) => ({
-    params: { courseId: course.id },
-    props: { course }, 
-  }));
-}
+//   return courses.map((course: { id: string }) => ({
+//     params: { courseId: course.id },
+//     props: { course }, 
+//   }));
+// }
 
 
 ---
