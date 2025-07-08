@@ -1,5 +1,12 @@
 <template>
-  <div class="flex justify-between items-center p-5">
+  <div
+    v-if="fallLoading"
+    class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50 z-10 gap-3"
+  >
+    <i class="pi pi-spin pi-cog" style="font-size: 4rem; color: white"></i>
+    <span class="text-white text-lg">Letting You In....</span>
+  </div>
+  <div v-else class="flex justify-between items-center p-5">
     <div class="p-4 w-full flex flex-col items-center gap-6">
       <!-- Video Call Container -->
       <div
@@ -90,7 +97,9 @@ import {
   resumeStream,
 } from "../../helper/streamConsumer.js";
 
-const fallLaoding = ref(true);
+const fallLoading = ref(true);
+
+const stream = ref(null);
 
 const myVideo = ref(null);
 const screenRef = ref(null);
@@ -301,9 +310,9 @@ const connectSendTransport = async (type, mediaStream) => {
 
   try {
     if (type === "camera" && mediaStream && !producers.camera) {
-      const videoTrack = mediaStream.getVideoTracks()[0];
+      // const videoTrack = mediaStream.getVideoTracks()[0];
       const videoProducer = await producerTransport.produce({
-        track: videoTrack,
+        track: mediaStream,
         encodings: [
           { rid: "r0", maxBitrate: 100000, scalabilityMode: "S1T3" },
           { rid: "r1", maxBitrate: 300000, scalabilityMode: "S1T3" },
@@ -324,9 +333,9 @@ const connectSendTransport = async (type, mediaStream) => {
     }
 
     if (type === "audio" && mediaStream && !producers.audio) {
-      const audioTrack = mediaStream.getAudioTracks()[0];
+      // const audioTrack = mediaStream.getAudioTracks()[0];
       const audioProducer = await producerTransport.produce({
-        track: audioTrack,
+        track: mediaStream,
         appData: { label: "audio" },
       });
       producers.audio = audioProducer;
@@ -345,41 +354,51 @@ const connectSendTransport = async (type, mediaStream) => {
   }
 };
 
-const startMedia = async () => {
+const startMedia = async ({ video = false, audio = false } = {}) => {
   try {
-    stream.value = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: false,
-    });
+    stream.value = await navigator.mediaDevices.getUserMedia({ video, audio });
 
-    // Play the local video
-    if (myVideo.value) {
+    if (myVideo.value && video) {
       myVideo.value.srcObject = stream.value;
       await myVideo.value.play();
     }
 
-    // Enable UI flags
-    cameraEnabled.value = true;
-    micEnabled.value = false;
+    if (video) {
+      const videoTrack = stream.value.getVideoTracks()[0];
+      if (videoTrack) {
+        cameraEnabled.value = true;
+        await connectSendTransport("camera", videoTrack);
+      }
+    }
 
-    // Call mediasoup connection functions
-    await connectSendTransport("camera", stream.value);
-    // await connectSendTransport("audio", stream.value);
+    if (audio) {
+      const audioTrack = stream.value.getAudioTracks()[0];
+      if (audioTrack) {
+        micEnabled.value = true;
+        await connectSendTransport("audio", audioTrack);
+      }
+    }
   } catch (err) {
-    console.error("Media access error:", err);
+    console.error("Error producing media:", err);
     alert("Could not access camera/microphone.");
   }
 };
 
-const toggleCamera = () => {
-  if (!stream.value) return startMedia();
+const toggleCamera = async () => {
+  if (!stream.value) {
+    await startMedia({ video: true, audio: false });
+    return;
+  }
   const videoTrack = stream.value.getVideoTracks()[0];
   videoTrack.enabled = !videoTrack.enabled;
   cameraEnabled.value = videoTrack.enabled;
 };
 
-const toggleMic = () => {
-  if (!stream.value) return startMedia();
+const toggleMic = async () => {
+  if (!stream.value) {
+    await startMedia({ video: false, audio: true });
+    return;
+  }
   const audioTrack = stream.value.getAudioTracks()[0];
   audioTrack.enabled = !audioTrack.enabled;
   micEnabled.value = audioTrack.enabled;
@@ -394,7 +413,7 @@ const endCall = () => {
     micEnabled.value = false;
   }
 
-  socket.emit("leave-room", {
+  socket.value.emit("leave-room", {
     roomId: classId,
     userName: "student",
   });

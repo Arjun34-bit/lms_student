@@ -3,6 +3,8 @@ import "../../styles/global.css";
 import StatusBar from "../../miscellenous/StatusBar.svelte";
 import SideBar from "../../miscellenous/SideBar.svelte";
 import RouteView from "../../router/clientRender/RouteView.vue";
+import Layout from "../../layouts/Layout.astro";
+import NavBar from "../../miscellenous/NavBar.svelte";
 ---
 
 <html lang="en">
@@ -12,11 +14,12 @@ import RouteView from "../../router/clientRender/RouteView.vue";
   </head>
   <body class="h-screen overflow-hidden flex flex-col">
     <div class="flex-shrink-0">
-      <StatusBar 
+      <!-- <StatusBar 
         name="John Doe" 
         avatar="https://i.pravatar.cc/40" 
         client:load 
-      />
+      /> -->
+      <NavBar client:load/>
 
       <div class="sm:hidden flex justify-end px-4 py-2 bg-gray-800">
         <button
@@ -40,6 +43,7 @@ import RouteView from "../../router/clientRender/RouteView.vue";
         <RouteView client:only="vue" />
       </main>
     </div>
+    
 
     <script>
       const toggleBtn = document.getElementById("toggleSidebar");
