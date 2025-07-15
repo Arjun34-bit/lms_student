@@ -1,0 +1,16 @@
+---
+import "../../styles/global.css";
+import Profile from "../../components/profile/Profile.vue";
+import Layout from "../../layouts/Layout.astro";
+import ProtectedRoute from "../../router/ProtectedRoute.vue"
+
+
+---
+
+<Layout title="PCC Student" >
+    <main>
+      <!-- <ProtectedRoute> -->
+        <Profile  client:load />
+      <!-- </ProtectedRoute> -->
+    </main>
+  </Layout>

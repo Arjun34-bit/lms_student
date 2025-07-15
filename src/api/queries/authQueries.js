@@ -1,6 +1,8 @@
+import { getItem } from "../../utils/localStorageUtils";
 import axiosClient from "../client";
 
 const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL;
+const token = getItem("token");
 
 export const authLoginApi = async ({ email, password }) => {
   const { data } = await axiosClient.post(
@@ -46,5 +48,29 @@ export const getAllCourseApi = async () => {
   const response = await axiosClient.get(
     `${apiBaseUrl}/student/course/all-courses`
   );
+  return response.data;
+};
+
+export const updateUserProfileApi = async (data) => {
+  const response = await axiosClient.patch(
+    `${apiBaseUrl}/student/user/update-profile`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const getUserProfileApi = async () => {
+  const response = await axiosClient.get(`${apiBaseUrl}/student/user/profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
   return response.data;
 };

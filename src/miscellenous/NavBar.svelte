@@ -75,7 +75,7 @@
           {#if showDropdown}
             <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50">
               <a href="/courses/my-courses" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Courses</a>
-              <a href="/cart" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Cart</a>
+              <a href="/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">My Profile</a>
               <a href="/live-classes" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Live Classes</a>
               <button on:click={logout} class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">Logout</button>
             </div>

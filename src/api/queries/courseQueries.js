@@ -11,23 +11,6 @@ export const getAllCourseApi = async () => {
   return response.data;
 };
 
-export const buyCourseApi = async (courseId) => {
-  const response = await axiosClient.post(
-    `${apiBaseUrl}/student/course/buy-course`,
-    {
-      courseId: courseId,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    }
-  );
-
-  return response.data;
-};
-
 export const getEnrolledCourse = async () => {
   const response = await axiosClient.get(
     `${apiBaseUrl}/student/enrolled-course`,

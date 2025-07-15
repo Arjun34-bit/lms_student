@@ -4,26 +4,27 @@
 
     <div v-if="loading" class="text-gray-500">Loading your courses...</div>
 
-    <div v-else-if="courses.length" class="space-y-4">
+    <div v-else-if="courses.length" class="grid gap-6 max-w-2xl">
       <div
         v-for="(enrolled, index) in courses"
         :key="index"
-        class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col sm:flex-row"
+        class="w-120 bg-white shadow-lg rounded-xl overflow-hidden"
       >
         <img
           :src="enrolled.course.thumbnailUrl || defaultThumbnail"
           alt="Course Thumbnail"
-          class="w-full sm:w-40 h-40 object-cover"
+          class="w-full h-52 object-cover"
         />
 
-        <div class="p-4 flex-1">
-          <h2 class="text-xl font-semibold">{{ enrolled.course.title }}</h2>
-          <p class="text-sm text-gray-600 mb-2">{{ enrolled.course.level }}</p>
-          <p class="text-sm text-gray-700 whitespace-pre-line">
-            {{ enrolled.course.description }}
+        <div class="p-4">
+          <h2 class="text-xl font-semibold mb-1">
+            {{ enrolled.course.title }}
+          </h2>
+          <p class="text-sm text-gray-600 mb-1">
+            {{ enrolled.course.level }}
           </p>
 
-          <div class="mt-2 text-sm text-gray-500 space-y-1">
+          <div class="text-sm text-gray-700 space-y-1 mt-2">
             <p>
               <span class="font-medium">Department:</span>
               {{
@@ -44,9 +45,17 @@
             </p>
           </div>
 
-          <p class="mt-3 font-bold text-blue-600">
+          <p class="mt-3 font-bold text-blue-600 text-base">
             ₹{{ enrolled.course.price }}
           </p>
+        </div>
+        <div class="">
+          <button
+            class="bg-blue-300 w-full p-3 text-lg font-semibold cursor-pointer hover:scale-110 transition-transform duration-300"
+            @click="goTo(enrolled?.course?.id)"
+          >
+            <i class="pi pi-caret-right" style="color: blue"></i>Start Watching
+          </button>
         </div>
       </div>
     </div>
@@ -105,4 +114,8 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
+const goTo = (courseId) => {
+  window.location.href = `/course-program/${courseId}`;
+};
 </script>

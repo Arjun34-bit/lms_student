@@ -70,8 +70,10 @@
       </div>
       <div class="flex flex-col items-center mt-2">
         <span class="text-center">OR</span>
-        <span @click="goToPhoneLogin" class="cursor-pointer font-semibold mt-2"
-          >Login With Phone Number</span
+        <span
+          @click="goToPhoneLogin"
+          class="cursor-pointer font-semibold mt-2 bg-gray-200 py-2 px-3 rounded-md"
+          >Login via Phone</span
         >
       </div>
     </Form>
@@ -89,6 +91,8 @@ import { signInWithGoogle } from "../../config/firebaseConfig.js";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase/config.js";
 
+import Cookies from "js-cookie";
+
 // const router = useRouter();
 
 const loading = ref(false);
@@ -97,6 +101,15 @@ const remember = ref(false);
 
 const goToPhoneLogin = () => {
   window.location.href = "/auth/phone-signon";
+};
+
+const setCookie = (key, value) => {
+  Cookies.set(key, value, {
+    expires: 30,
+    path: "/",
+    secure: true,
+    sameSite: "Strict",
+  });
 };
 
 const onSubmit = async (values) => {
@@ -108,6 +121,7 @@ const onSubmit = async (values) => {
     if (response?.data?.access_token && response?.data?.user) {
       setItem("token", response?.data?.access_token);
       setItem("user", response?.data?.user);
+      setCookie("token", response?.data?.access_token);
       setTimeout(() => (window.location.href = "/"), 2000);
     }
     loading.value = false;

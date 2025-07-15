@@ -114,10 +114,9 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { fetchImageApi } from "../../api/queries/commonQueries";
+import { fetchImageApi,buyCourseApi } from "../../api/queries/commonQueries";
 import {
   getCourseByIdApi,
-  buyCourseApi,
 } from "../../api/queries/courseQueries";
 import { razorpayKey, verifyURL } from "../../constants/constants";
 import { getItem } from "../../utils/localStorageUtils";

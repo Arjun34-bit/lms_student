@@ -11,6 +11,7 @@
         <Field
           name="name"
           type="text"
+          :value="user?.name || ''"
           class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           placeholder="Enter your name"
         />
@@ -41,7 +42,7 @@
     </Form>
   </div>
 
-  <ClassTable />
+  <MeetingCard />
 </template>
 
 <script setup>
@@ -49,8 +50,9 @@ import { ref } from "vue";
 import { Form, Field, ErrorMessage, useForm } from "vee-validate";
 import { joinSchema } from "./schema/classes";
 import ClassTable from "./MeetTable.vue";
-import { setItem } from "../../utils/localStorageUtils";
+import { getItem, setItem } from "../../utils/localStorageUtils";
 import { sharedState } from "../../store/store";
+import MeetingCard from "./MeetingCard.vue";
 
 const loading = ref(false);
 const submitError = ref("");
@@ -58,6 +60,8 @@ const submitError = ref("");
 const { handleSubmit } = useForm({
   // validationSchema: joinSchema,
 });
+
+const user = getItem("user");
 
 const onSubmit = (values, { resetForm }) => {
   submitError.value = "";
