@@ -1,5 +1,13 @@
 <template>
-  <div class="flex flex-col lg:flex-row justify-around items-start gap-6">
+  <div v-if="loading" class="flex justify-center items-center h-screen">
+    <span
+      ><i class="pi pi-spin pi-spinner" style="font-size: 4rem; color: blue"></i
+    ></span>
+  </div>
+  <div
+    v-else="!loading"
+    class="flex flex-col lg:flex-row justify-around items-start gap-6"
+  >
     <div class="w-full lg:w-[65%] p-6 bg-white rounded-2xl shadow-md mt-6">
       <img
         :src="course?.thumbnailUrl || thumbnailSrc"
@@ -49,6 +57,7 @@
 
       <span class="font-bold text-lg">Course Curriculam</span>
       <div
+        v-if="course.CourseLession"
         class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700 mb-6"
       >
         <div
@@ -70,9 +79,11 @@
     </div>
 
     <div
+      v-if="course?.CourseLession.length !== 0"
       class="w-full lg:w-[35%] p-6 bg-white border rounded-2xl shadow-md mt-6 flex flex-col items-center justify-between"
     >
       <div
+        v-if="course.videoUrl"
         class="w-full h-60 bg-gray-200 rounded-lg mb-6 flex items-center justify-center"
       >
         <VideoPlayer :videoUrl="course.videoUrl" />
@@ -97,6 +108,12 @@
         </button>
       </div>
     </div>
+    <div
+      v-else="course?.CourseLession.length === 0"
+      class="w-full lg:w-[35%] p-6 bg-white border rounded-2xl shadow-md mt-6 flex flex-col items-center justify-between"
+    >
+      <span>No Lectures Alloted Yet</span>
+    </div>
   </div>
 </template>
 
@@ -117,6 +134,8 @@ const props = defineProps({
 });
 
 const startVideo = ref(false);
+
+const loading = ref(true);
 
 const route = useRoute();
 const course = ref({});
@@ -144,8 +163,11 @@ onMounted(async () => {
     } else {
       thumbnailSrc.value = defaultThumbnail;
     }
+    loading.value = false;
   } catch (err) {
+    alert("Failed to load course detail");
     console.error("Failed to load course detail", err);
+    loading.value = false;
   }
 });
 

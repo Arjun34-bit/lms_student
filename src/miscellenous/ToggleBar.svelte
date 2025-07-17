@@ -10,7 +10,7 @@
     <div class="max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex h-16 items-center gap-3">
         <div class="flex items-center">
-            <a href="/courses/my-course" class="text-sm px-2 py-1 font-semibold bg-white rounded-lg text-black-800:text-white">
+            <a href="/courses/my-courses" class="text-sm px-2 py-1 font-semibold bg-white rounded-lg text-black-800:text-white">
                 <i class="pi pi-arrow-left"></i><span class="ml-2">Back</span>
             </a>
           </div>

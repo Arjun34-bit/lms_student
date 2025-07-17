@@ -69,14 +69,14 @@ onBeforeUnmount(() => {
 });
 
 // Optional: react to prop changes
-watch(
-  () => props.videoUrl,
-  (newUrl) => {
-    if (player.value) {
-      player.value.src({ src: newUrl, type: "video/mp4" });
-    }
-  }
-);
+// watch(
+//   () => props.videoUrl,
+//   (newUrl) => {
+//     if (player.value) {
+//       player.value.src({ src: newUrl, type: "video/mp4" });
+//     }
+//   }
+// );
 </script>
 
 <style scoped>

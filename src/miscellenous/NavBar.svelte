@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { userLogout } from '../api/queries/authQueries';
 
   let isOpen = false;
   let showDropdown = false;
@@ -26,7 +27,8 @@
     }
   };
 
-  const logout = () => {
+  const logout = async() => {
+    await userLogout()
     localStorage.removeItem('user');
     localStorage.removeItem("token")
     localStorage.removeItem("meetingDetails")

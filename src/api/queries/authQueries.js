@@ -10,6 +10,9 @@ export const authLoginApi = async ({ email, password }) => {
     {
       email,
       password,
+    },
+    {
+      withCredentials: true,
     }
   );
   return data;
@@ -73,4 +76,21 @@ export const getUserProfileApi = async () => {
     },
   });
   return response.data;
+};
+
+export const userLogout = async () => {
+  try {
+    const data = await axiosClient.post(
+      `${apiBaseUrl}/student/auth/logout`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+
+    return { message: data?.message };
+  } catch (error) {
+    console.log(error);
+    throw new Error("Logout failed");
+  }
 };
