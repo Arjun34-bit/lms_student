@@ -1,5 +1,7 @@
 <script>
-    let isOpen = false;
+  import { courseTitle } from "../store/courseStore.js"
+  import { fade } from "svelte/transition"
+      let isOpen = false;
   
     const toggleMenu = () => {
       isOpen = !isOpen;
@@ -15,9 +17,9 @@
             </a>
           </div>
         <div class="flex items-center">
-          <a href="/" class="text-xl font-bold text-gray-800 dark:text-white">
-            Course Title
-          </a>
+          <span class="text-xl font-bold text-gray-800 dark:text-white" transition:fade={{duration:1000}}>
+            {$courseTitle}
+          </span>
         </div>
   
         <!-- Desktop Nav -->

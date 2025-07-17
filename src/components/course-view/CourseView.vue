@@ -13,7 +13,7 @@
     </aside>
 
     <main
-      class="flex-1 p-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+      class="flex-1 overflow-y-auto p-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
     >
       <VideoView :lecture="selectedLecture" />
       <LectureTabs />
@@ -27,6 +27,8 @@ import VideoView from "./module/VideoView.vue";
 import LectureModule from "./module/LectureModule.vue";
 import LectureTabs from "./module/LectureTabs.vue";
 import { getEnrolledCourseById } from "../../api/queries/enrolledCourse";
+import { setCourseTitle } from "../../store/courseStore.js";
+import { setIsLoading } from "../../store/loader.js";
 
 const props = defineProps({
   courseId: {
@@ -36,12 +38,6 @@ const props = defineProps({
 });
 
 const course = ref(null);
-
-// const course = ref({
-//   title: "Introduction to Web Development",
-//   lectures: [],
-// });
-
 const selectedLecture = ref(null);
 
 const setSelectedLecture = (lecture) => {
@@ -49,7 +45,16 @@ const setSelectedLecture = (lecture) => {
 };
 
 onMounted(async () => {
-  course.value = await getEnrolledCourseById(props?.courseId);
-  console.log(course);
+  try {
+    setIsLoading(true);
+    course.value = await getEnrolledCourseById(props?.courseId);
+    setCourseTitle(course?.value?.course?.title);
+  } catch (error) {
+    console.error("Failed to load course:", error);
+  } finally {
+    setIsLoading(false);
+  }
 });
 </script>
+
+<style scoped></style>
