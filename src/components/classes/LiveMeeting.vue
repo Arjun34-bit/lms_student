@@ -86,7 +86,6 @@
 import { ref, onMounted, watch, onBeforeUnmount } from "vue";
 import { io } from "socket.io-client";
 import { getItem } from "../../utils/localStorageUtils.js";
-import { sharedState } from "../../store/store";
 import { reactive } from "vue";
 import { Device } from "mediasoup-client";
 // import { handleNewProducer } from "../../helper/mediasoupHelper.js";
@@ -124,8 +123,8 @@ let producerTransport = null;
 
 const remoteProducers = ref([]);
 
-const classId = sharedState.meetingId || getItem("meetingId");
-const userName = sharedState.userName || getItem("userName");
+const classId = getItem("meetingId");
+const userName = getItem("userName");
 
 onMounted(() => {
   if (!classId || !userName) {

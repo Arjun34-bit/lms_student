@@ -51,7 +51,7 @@ import { Form, Field, ErrorMessage, useForm } from "vee-validate";
 import { joinSchema } from "./schema/classes";
 import ClassTable from "./MeetTable.vue";
 import { getItem, setItem } from "../../utils/localStorageUtils";
-import { sharedState } from "../../store/store";
+// import { sharedState } from "../../store/store";
 import MeetingCard from "./MeetingCard.vue";
 
 const loading = ref(false);
@@ -70,8 +70,8 @@ const onSubmit = (values, { resetForm }) => {
     loading.value = true;
 
     // Update shared state
-    sharedState.userName = values.name;
-    sharedState.meetingId = values.classID;
+    // sharedState.userName = values.name;
+    // sharedState.meetingId = values.classID;
 
     // Persist to localStorage
     setItem("userName", values.name);
