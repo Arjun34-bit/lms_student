@@ -86,7 +86,7 @@
         v-if="course.videoUrl"
         class="w-full h-60 bg-gray-200 rounded-lg mb-6 flex items-center justify-center"
       >
-        <VideoPlayer :videoUrl="course.videoUrl" />
+        <VideoPlayer :videoUrl="course.videoUrl" :type="demo" />
       </div>
 
       <div>

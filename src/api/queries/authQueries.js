@@ -31,9 +31,15 @@ export const authRegisterApi = async ({ name, email, password }) => {
 };
 
 export const googleSigninApi = async (idToken) => {
-  const { data } = await axiosClient.post("/student/auth/google-login", {
-    idToken,
-  });
+  const { data } = await axiosClient.post(
+    "/student/auth/google-login",
+    {
+      idToken,
+    },
+    {
+      withCredentials: true,
+    }
+  );
   return data;
 };
 
@@ -42,6 +48,9 @@ export const authLoginWithPhoneApi = async (idToken) => {
     `${apiBaseUrl}/student/auth/login-with-phone-number`,
     {
       idToken,
+    },
+    {
+      withCredentials: true,
     }
   );
   return response.data;

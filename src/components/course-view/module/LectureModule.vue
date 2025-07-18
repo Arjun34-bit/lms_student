@@ -12,11 +12,10 @@
           v-for="lesson in lessions"
           :key="lesson.id"
           class="border border-gray-300 dark:border-gray-700 rounded overflow-hidden bg-white dark:bg-gray-800"
-          @:click="toggleTopics()"
         >
           <button
             class="w-full flex justify-between items-center p-4 text-left text-lg font-medium text-gray-800 dark:text-gray-200 focus:outline-none"
-            @click="toggleLesson(lesson.id)"
+            @:click="toggleLesson(lesson.id)"
           >
             {{ lesson.lectureName }}
             <svg
@@ -47,9 +46,10 @@
                   v-for="sub in lesson.Videos || []"
                   :key="sub.id"
                   @click="handleVideo(sub.id)"
-                  class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+                  class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition flex justify-between items-center"
                 >
-                  {{ sub.title }}
+                  <p>{{ sub.title }}</p>
+                  <i class="pi pi-lock"></i>
                 </li>
               </ul>
             </div>
@@ -65,6 +65,8 @@ import { onMounted, ref } from "vue";
 import CardSkeleton from "../../../fallbackUI/Card.vue";
 import { isLoading } from "../../../store/loader.js";
 import { useStore } from "@nanostores/vue";
+import { updateKey } from "../../../helper/custom.js";
+// import { updateKey } from "../../../store/courseStore.js";
 
 const props = defineProps({
   lectures: Object,
@@ -79,9 +81,9 @@ const expandedLessons = ref(new Set());
 
 const lessions = ref(props?.lectures);
 const videos = ref(props?.videos);
-console.log(videos);
 
 const toggleLesson = (id) => {
+  updateKey("lessionId", id);
   if (expandedLessons.value.has(id)) {
     expandedLessons.value.delete(id);
   } else {
@@ -90,11 +92,9 @@ const toggleLesson = (id) => {
 };
 
 const handleVideo = (id) => {
-  console.log("id", id);
   for (const lesson of videos.value) {
     const video = lesson.Videos.find((v) => v.id === id);
     if (video) {
-      console.log(video);
       emit("select", video);
       return;
     }
@@ -102,8 +102,7 @@ const handleVideo = (id) => {
   }
 };
 
-// onMounted(() => {
-//   if (lessions.length !== 0) {
-//   }
-// });
+onMounted(() => {
+  updateKey("lessionId", lessions.value[0]?.id);
+});
 </script>

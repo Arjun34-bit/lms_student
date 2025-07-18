@@ -1,6 +1,5 @@
 <template>
   <div class="mt-6 w-full">
-    <!-- Tabs -->
     <div class="flex border-b dark:border-gray-700">
       <button
         v-for="tab in tabs"
@@ -17,7 +16,6 @@
       </button>
     </div>
 
-    <!-- Tab Content -->
     <div class="mt-4">
       <div v-if="activeTab === 'Notes'">
         <textarea
@@ -30,7 +28,7 @@
 
       <div v-else-if="activeTab === 'Summary'">
         <p class="text-gray-700 dark:text-gray-300">
-          {{ summary }}
+          {{ summary ? summary : defaultDescription }}
         </p>
       </div>
 
@@ -44,12 +42,14 @@
 <script setup>
 import { ref } from "vue";
 
+const props = defineProps({
+  lecture: Object,
+  defaultDescription: String,
+});
+
 const tabs = ["Notes", "Summary", "Q&A"];
 const activeTab = ref("Notes");
 
-// Dummy data — replace with real props or fetch from API
 const notes = ref("");
-const summary = ref(
-  "This lecture covered the fundamentals of HTML, including elements, structure, and best practices."
-);
+const summary = ref(props.lecture?.description);
 </script>

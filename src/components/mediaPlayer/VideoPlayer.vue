@@ -11,13 +11,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
-import videojs from "video.js";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import "video.js/dist/video-js.css";
-// import "videojs-contrib-quality-levels";
-import "videojs-http-source-selector";
+import throttle from "lodash.throttle";
 
-// Props
 const props = defineProps({
   videoUrl: {
     type: String,
@@ -27,15 +24,28 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  type: {
+    type: String,
+    required: true,
+  },
 });
 
 const videoRef = ref(null);
 const player = ref(null);
 
-const previewImg =
-  "https://media.istockphoto.com/id/1459068091/vector/red-color-round-seal-sticker-in-word-preview-on-white-background.jpg";
+const emit = defineEmits(["updatePosition"]);
 
-onMounted(() => {
+const emitPosition = throttle(() => {
+  if (player.value) {
+    const time = player.value.currentTime();
+    emit("updatePosition", time);
+  }
+}, 10000);
+
+onMounted(async () => {
+  const videojs = (await import("video.js")).default;
+  const httpSourceSelector = await import("videojs-http-source-selector");
+
   player.value = videojs(videoRef.value, {
     controls: true,
     autoplay: false,
@@ -50,33 +60,32 @@ onMounted(() => {
     playbackRates: [0.5, 1, 1.5, 2],
   });
 
-  // if (props.start) {
-  //   player.value.play()
-  // }
   player.value.ready(() => {
     if (typeof player.value.httpSourceSelector === "function") {
-      player.value.httpSourceSelector({
-        default: "auto",
-      });
+      player.value.httpSourceSelector({ default: "auto" });
     }
+
+    player.value.on("timeupdate", emitPosition);
+
+    player.value.on("pause", () => {
+      emit("updatePosition", player.value.currentTime());
+    });
+
+    player.value.on("ended", () => {
+      emit("updatePosition", player.value.currentTime());
+    });
   });
 });
 
 onBeforeUnmount(() => {
   if (player.value) {
+    if (props.type === "lecture") {
+      getCurrentTime();
+    }
+    player.value.off("timeupdate", emitPosition);
     player.value.dispose();
   }
 });
-
-// Optional: react to prop changes
-// watch(
-//   () => props.videoUrl,
-//   (newUrl) => {
-//     if (player.value) {
-//       player.value.src({ src: newUrl, type: "video/mp4" });
-//     }
-//   }
-// );
 </script>
 
 <style scoped>
