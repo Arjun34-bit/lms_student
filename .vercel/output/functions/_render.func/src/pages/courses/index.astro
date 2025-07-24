@@ -1,0 +1,19 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import "../../styles/global.css";
+import CoursePage from "../../components/courses/index.vue"
+import VueQueryWrapper from "../../vueConfig/VueQueryWrapper.vue"
+
+export const prerender = false;
+
+
+---
+
+<Layout title="Let's Learn Student" >
+  <main>
+    <!-- <VueQueryWrapper client:load>           For using useQuery Hook -->
+     <CoursePage client:load />     
+    <!-- </VueQueryWrapper> -->
+      
+  </main>
+</Layout>

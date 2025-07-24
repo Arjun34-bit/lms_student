@@ -1,0 +1,11 @@
+---
+import AuthLayout from '../../layouts/auth.astro';
+import RegisterForm from '../../components/auth/Register.vue';
+
+export const prerender = false;
+
+---
+
+<AuthLayout>
+  <RegisterForm client:load />
+</AuthLayout>

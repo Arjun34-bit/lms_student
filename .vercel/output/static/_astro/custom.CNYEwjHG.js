@@ -1,0 +1,1 @@
+import{t as a}from"./courseStore._GKmWtHz.js";function c(t){return new Date(t).toLocaleString()}function u(t){return t==="approved"?"text-green-600":"text-orange-500"}function f(t,e){const n=new Date,o=new Date(t),r=new Date(e);return n>=o&&n<=r}function i(t,e){a.set({...a.get(),[t]:e})}export{f as c,c as f,u as g,i as u};

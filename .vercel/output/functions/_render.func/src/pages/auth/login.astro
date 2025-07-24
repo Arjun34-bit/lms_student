@@ -1,0 +1,13 @@
+---
+import AuthLayout from '../../layouts/auth.astro';
+import LoginForm from '../../components/auth/Login.vue';
+
+
+export const prerender = false;
+
+
+---
+
+<AuthLayout>
+  <LoginForm client:load />
+</AuthLayout>

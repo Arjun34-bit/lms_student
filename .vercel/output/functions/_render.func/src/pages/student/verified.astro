@@ -1,0 +1,20 @@
+---
+export const prerender = false;
+
+import "../../styles/global.css";
+const { request } = Astro;
+const url = new URL(request.url);
+const message = url.searchParams.get("message") || "No message provided.";
+
+import Verified from "../../miscellenous/Verified.svelte"
+---
+
+<html lang="en">
+  <head>
+    <title>Verification</title>
+    <meta charset="UTF-8" />
+  </head>
+  <body class="flex justify-center items-center h-screen bg-gradient-to-br from-green-200 via-blue-100 to-purple-200 animate-bgFade transition-all duration-1000">
+    <Verified message={message} />
+  </body>  
+</html>

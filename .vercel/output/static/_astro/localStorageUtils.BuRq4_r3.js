@@ -1,0 +1,1 @@
+const o=(e,t)=>{localStorage.removeItem(e),typeof localStorage<"u"&&localStorage.setItem(e,JSON.stringify(t))},l=e=>{if(typeof localStorage<"u"){const t=localStorage.getItem(e);return t?JSON.parse(t):null}return null};export{l as g,o as s};

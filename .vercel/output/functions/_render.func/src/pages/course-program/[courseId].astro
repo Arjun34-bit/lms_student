@@ -1,0 +1,23 @@
+---
+import "../../styles/global.css";
+import ToggleBar from "../../miscellenous/ToggleBar.svelte"
+import CourseView from "../../components/course-view/CourseView.vue"
+
+
+const { courseId } = Astro.params;
+
+if (!courseId) {
+  throw new Error("Missing courseId in URL");
+}
+
+
+export const prerender = false;
+
+
+
+---
+
+  <main>
+     <ToggleBar client:load />  
+     <CourseView courseId={courseId} client:load />        
+  </main>

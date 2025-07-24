@@ -1,0 +1,19 @@
+---
+import "../../styles/global.css";
+import Profile from "../../components/profile/Profile.vue";
+import Layout from "../../layouts/Layout.astro";
+
+
+
+export const prerender = false;
+
+
+---
+
+<Layout title="Let's Learn Student" >
+    <main>
+      <!-- <ProtectedRoute> -->
+        <Profile  client:load />
+      <!-- </ProtectedRoute> -->
+    </main>
+  </Layout>
