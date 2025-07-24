@@ -1,4 +1,4 @@
-import{i as t}from"./runtime-core.esm-bundler.lqNYk3e-.js";/*!
+import{i as t}from"./runtime-core.esm-bundler.Vqe_tuZK.js";/*!
   * vue-router v4.5.1
   * (c) 2025 Eduardo San Martin Morote
   * @license MIT

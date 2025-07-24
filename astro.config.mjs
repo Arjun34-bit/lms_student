@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
-import nodeAdapter from "@astrojs/node";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 
 import vue from "@astrojs/vue";
 
