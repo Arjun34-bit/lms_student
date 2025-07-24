@@ -8,14 +8,7 @@ import svelte from "@astrojs/svelte";
 
 import tailwindcss from "@tailwindcss/vite";
 
-// export default defineConfig({
-//   adapter: nodeAdapter({ mode: "standalone" }),
-//   integrations: [vue(), svelte()],
-//   vite: {
-//     plugins: [tailwindcss()],
-//   },
-// });
-
+// https://astro.build/config
 export default defineConfig({
   output: "server",
   adapter: vercel({}),
