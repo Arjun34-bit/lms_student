@@ -1,4 +1,4 @@
-import { c as createComponent, a as createAstro, r as renderScript, b as renderHead, d as renderComponent, e as renderSlot, f as renderTemplate } from './astro/server_Batihp0E.mjs';
+import { c as createComponent, a as createAstro, r as renderScript, b as renderHead, d as renderComponent, e as renderSlot, f as renderTemplate } from './astro/server_BhpNIqto.mjs';
 import 'kleur/colors';
 import { N as NavBar } from './NavBar_DVVXKwPL.mjs';
 

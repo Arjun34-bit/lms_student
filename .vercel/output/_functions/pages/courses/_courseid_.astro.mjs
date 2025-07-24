@@ -1,6 +1,6 @@
-import { c as createComponent, a as createAstro, d as renderComponent, f as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_Batihp0E.mjs';
+import { c as createComponent, a as createAstro, d as renderComponent, f as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_BhpNIqto.mjs';
 import 'kleur/colors';
-import { $ as $$Layout } from '../../chunks/Layout_DR1EsV0j.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_C4bnNtuO.mjs';
 /* empty css                                         */
 import { useSSRContext, ref, onMounted, mergeProps } from 'vue';
 import { useRoute } from 'vue-router';

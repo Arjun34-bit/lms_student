@@ -1,7 +1,7 @@
-import { c as createComponent, d as renderComponent, f as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_Batihp0E.mjs';
+import { c as createComponent, d as renderComponent, f as renderTemplate, m as maybeRenderHead } from '../../chunks/astro/server_BhpNIqto.mjs';
 import 'kleur/colors';
 /* empty css                                         */
-import { $ as $$Layout } from '../../chunks/Layout_DR1EsV0j.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_C4bnNtuO.mjs';
 import { useSSRContext, ref, onMounted, mergeProps } from 'vue';
 import { g as getEnrolledCourse, f as fetchDepartmentsApi } from '../../chunks/courseQueries_BEXyJw61.mjs';
 import { g as getItem } from '../../chunks/localStorageUtils_xJkj8yAm.mjs';

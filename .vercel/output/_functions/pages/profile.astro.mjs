@@ -1,4 +1,4 @@
-import { c as createComponent, d as renderComponent, f as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_Batihp0E.mjs';
+import { c as createComponent, d as renderComponent, f as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_BhpNIqto.mjs';
 import 'kleur/colors';
 /* empty css                                      */
 import { useSSRContext, ref, onMounted, mergeProps, withCtx, createVNode, toDisplayString, createBlock, createCommentVNode, openBlock, Fragment, renderList } from 'vue';
@@ -8,7 +8,7 @@ import { s as setItem, g as getItem } from '../chunks/localStorageUtils_xJkj8yAm
 import { g as getUserProfileApi, u as updateUserProfileApi } from '../chunks/authQueries_DkoB0nJb.mjs';
 import { ssrRenderAttrs, ssrRenderComponent, ssrRenderList, ssrInterpolate } from 'vue/server-renderer';
 import { _ as _export_sfc } from '../chunks/_plugin-vue_export-helper_pcqpp-6-.mjs';
-import { $ as $$Layout } from '../chunks/Layout_DR1EsV0j.mjs';
+import { $ as $$Layout } from '../chunks/Layout_C4bnNtuO.mjs';
 export { r as renderers } from '../chunks/_@astro-renderers_DqP8FkpL.mjs';
 
 const _sfc_main = {

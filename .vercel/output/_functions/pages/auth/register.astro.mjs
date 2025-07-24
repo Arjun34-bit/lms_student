@@ -1,6 +1,6 @@
-import { c as createComponent, d as renderComponent, f as renderTemplate } from '../../chunks/astro/server_Batihp0E.mjs';
+import { c as createComponent, d as renderComponent, f as renderTemplate } from '../../chunks/astro/server_BhpNIqto.mjs';
 import 'kleur/colors';
-import { r as registerSchema, $ as $$Auth } from '../../chunks/auth_BQTa5xpx.mjs';
+import { r as registerSchema, $ as $$Auth } from '../../chunks/auth_BjoklTmA.mjs';
 import { useSSRContext, ref, mergeProps, withCtx, createVNode, createBlock, createCommentVNode, openBlock, toDisplayString, createTextVNode } from 'vue';
 import { ErrorMessage, Field, Form } from 'vee-validate';
 import { b as authRegisterApi } from '../../chunks/authQueries_DkoB0nJb.mjs';

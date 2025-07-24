@@ -1,4 +1,4 @@
-import { c as createComponent, a as createAstro, m as maybeRenderHead, d as renderComponent, f as renderTemplate } from '../chunks/astro/server_Batihp0E.mjs';
+import { c as createComponent, a as createAstro, m as maybeRenderHead, d as renderComponent, f as renderTemplate } from '../chunks/astro/server_BhpNIqto.mjs';
 import 'kleur/colors';
 /* empty css                                      */
 import { mergeProps, ref, watch, onBeforeUnmount, useSSRContext, reactive, onMounted, computed } from 'vue';
