@@ -1,21 +1,28 @@
 <template>
-  <div class="bg-blue-300 p-8 rounded shadow-lg w-full max-w-md">
+  <div class="bg-gray-300 p-8 rounded shadow-lg w-full max-w-md">
     <h1 class="text-xl font-bold mb-4 text-center">Login Form</h1>
 
     <Form @submit="onSubmit" :validation-schema="loginSchema" class="space-y-4">
-      <div>
-        <label class="block text-sm mb-1">Enter your Email:</label>
+      <div class="w-full p-3 border border-blue-500 rounded-lg relative">
+        <label
+          class="block text-sm mb-1 absolute top-[-14px] bg-gray-300 w-fit p-1"
+        >
+          {{ emailMeta.touched && emailError ? emailError : "Email:" }}</label
+        >
         <Field
           name="email"
           type="email"
           class="input"
           placeholder="you@example.com"
         />
-        <ErrorMessage name="email" class="text-red-500 text-sm mt-1" />
       </div>
+      <!-- <ErrorMessage name="email" class="text-red-500 text-sm mt-1" /> -->
 
-      <div>
-        <label class="block text-sm mb-1">Enter your Password:</label>
+      <div class="w-full p-3 border border-blue-500 rounded-lg relative">
+        <label
+          class="block text-sm mb-1 absolute top-[-14px] bg-gray-300 w-fit p-1"
+          >Password:</label
+        >
         <Field
           name="password"
           type="password"
@@ -50,39 +57,32 @@
           >Sign Up</a
         >
       </div>
-      <hr />
-      <div class="mt-2 flex justify-center items center gap-2">
-        <button
-          type="button"
-          class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow transform transition duration-200 hover:scale-105"
-          @click="handleGoogleLogin"
-        >
-          <i class="pi pi-google text-xl text-red-600"></i>
-        </button>
-
-        <button
-          type="button"
-          class="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow transform transition duration-200 hover:scale-105"
-          @click="handleFacebookLogin"
-        >
-          <i class="pi pi-facebook text-xl text-blue-600"></i>
-        </button>
-      </div>
-      <div class="flex flex-col items-center mt-2">
-        <span class="text-center">OR</span>
-        <span
-          @click="goToPhoneLogin"
-          class="cursor-pointer font-semibold mt-2 bg-gray-200 py-2 px-3 rounded-md"
-          >Login via Phone</span
-        >
-      </div>
     </Form>
+  </div>
+
+  <hr />
+  <div class="mt-2 flex justify-center items center gap-2">
+    <button
+      type="button"
+      class="w-full h-10 flex items-center justify-center bg-gray-200 shadow transform transition duration-200 hover:scale-105 border border-blue-400"
+      @click="handleGoogleLogin"
+    >
+      <i class="pi pi-google text-xl text-red-600"></i>
+    </button>
+  </div>
+  <div class="flex flex-col items-center mt-2">
+    <span class="text-center">OR</span>
+    <span
+      @click="goToPhoneLogin"
+      class="w-full cursor-pointer text-center font-semibold mt-2 bg-gray-200 py-2 px-3 rounded-md"
+      >Login via Phone</span
+    >
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { Form, Field, ErrorMessage } from "vee-validate";
+import { Form, Field, ErrorMessage, useField } from "vee-validate";
 import { loginSchema } from "./schema/auth";
 import { authLoginApi, googleSigninApi } from "../../api/queries/authQueries";
 // import { useRouter } from "vue-router";
@@ -98,6 +98,12 @@ import Cookies from "js-cookie";
 const loading = ref(false);
 const submitError = ref("");
 const remember = ref(false);
+
+const {
+  value: email,
+  errorMessage: emailError,
+  meta: emailMeta,
+} = useField("email");
 
 const goToPhoneLogin = () => {
   window.location.href = "/auth/phone-signon";
