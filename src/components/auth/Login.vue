@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-300 p-8 rounded shadow-lg w-full max-w-md">
+  <div class="bg-gray-300 p-8 shadow-lg w-full max-w-md rounded-t-lg">
     <h1 class="text-xl font-bold mb-4 text-center">Login Form</h1>
 
     <Form @submit="onSubmit" :validation-schema="loginSchema" class="space-y-4">
@@ -60,7 +60,6 @@
     </Form>
   </div>
 
-  <hr />
   <div class="mt-2 flex justify-center items center gap-2">
     <button
       type="button"
@@ -74,7 +73,7 @@
     <span class="text-center">OR</span>
     <span
       @click="goToPhoneLogin"
-      class="w-full cursor-pointer text-center font-semibold mt-2 bg-gray-200 py-2 px-3 rounded-md"
+      class="w-full cursor-pointer text-center font-semibold mt-2 bg-gray-200 py-2 px-3 rounded-b-lg"
       >Login via Phone</span
     >
   </div>
