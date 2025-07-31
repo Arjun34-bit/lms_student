@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-orange-200 p-8 rounded shadow-lg w-full max-w-md">
+  <div class="bg-gray-300 p-8 rounded shadow-lg w-full max-w-md">
     <h1 class="text-xl font-bold mb-4 text-center">Register</h1>
 
     <Form
@@ -7,33 +7,43 @@
       :validation-schema="registerSchema"
       class="space-y-4"
     >
-      <div>
-        <label class="block text-sm mb-1">Enter your Name:</label>
+      <div class="w-full p-3 border border-blue-500 rounded-lg relative">
+        <label
+          class="block text-sm mb-1 absolute top-[-14px] bg-gray-300 w-fit p-1"
+          >Name:</label
+        >
         <Field name="name" type="text" class="input" placeholder="Your Name" />
-        <ErrorMessage name="name" class="text-red-500 text-sm mt-1" />
       </div>
+      <ErrorMessage name="name" class="text-red-500 text-sm mt-1" />
 
-      <div>
-        <label class="block text-sm mb-1">Enter your Email:</label>
+      <div class="w-full p-3 border border-blue-500 rounded-lg relative">
+        <label
+          class="block text-sm mb-1 absolute top-[-14px] bg-gray-300 w-fit p-1"
+        >
+          Email:</label
+        >
         <Field
           name="email"
           type="email"
           class="input"
           placeholder="you@example.com"
         />
-        <ErrorMessage name="email" class="text-red-500 text-sm mt-1" />
       </div>
+      <ErrorMessage name="email" class="text-red-500 text-sm mt-1" />
 
-      <div>
-        <label class="block text-sm mb-1">Enter your Password:</label>
+      <div class="w-full p-3 border border-blue-500 rounded-lg relative mt-3">
+        <label
+          class="block text-sm mb-1 absolute top-[-14px] bg-gray-300 w-fit p-1"
+          >Password:</label
+        >
         <Field
           name="password"
           type="password"
           class="input"
-          placeholder="••••••••"
+          placeholder="Enter Your Password"
         />
-        <ErrorMessage name="password" class="text-red-500 text-sm mt-1" />
       </div>
+      <ErrorMessage name="password" class="text-red-500 text-sm mt-1" />
 
       <div v-if="submitError" class="text-red-600 text-sm">
         {{ submitError }}

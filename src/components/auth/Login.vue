@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-300 p-8 shadow-lg w-full max-w-md rounded-t-lg">
-    <h1 class="text-xl font-bold mb-4 text-center">Login Form</h1>
+    <h1 class="headings text-xl font-bold mb-4 text-center">Login</h1>
 
     <Form @submit="onSubmit" :validation-schema="loginSchema" class="space-y-4">
       <div class="w-full p-3 border border-blue-500 rounded-lg relative">
@@ -16,9 +16,9 @@
           placeholder="you@example.com"
         />
       </div>
-      <!-- <ErrorMessage name="email" class="text-red-500 text-sm mt-1" /> -->
+      <ErrorMessage name="email" class="text-red-500 text-sm mt-1" />
 
-      <div class="w-full p-3 border border-blue-500 rounded-lg relative">
+      <div class="w-full p-3 border border-blue-500 rounded-lg relative mt-3">
         <label
           class="block text-sm mb-1 absolute top-[-14px] bg-gray-300 w-fit p-1"
           >Password:</label
@@ -29,8 +29,8 @@
           class="input"
           placeholder="Enter Your Password"
         />
-        <ErrorMessage name="password" class="text-red-500 text-sm mt-1" />
       </div>
+      <ErrorMessage name="password" class="text-red-500 text-sm mt-1" />
 
       <div class="flex items-center gap-2">
         <input type="checkbox" v-model="remember" />
@@ -63,17 +63,17 @@
   <div class="mt-2 flex justify-center items center gap-2">
     <button
       type="button"
-      class="w-full h-10 flex items-center justify-center bg-gray-200 shadow transform transition duration-200 hover:scale-105 border border-blue-400"
+      class="w-full h-10 flex items-center justify-center bg-gray-400 shadow transform transition duration-200 hover:scale-105"
       @click="handleGoogleLogin"
     >
-      <i class="pi pi-google text-xl text-red-600"></i>
+      <i class="pi pi-google text-xl text-blue-600"></i>
     </button>
   </div>
   <div class="flex flex-col items-center mt-2">
     <span class="text-center">OR</span>
     <span
       @click="goToPhoneLogin"
-      class="w-full cursor-pointer text-center font-semibold mt-2 bg-gray-200 py-2 px-3 rounded-b-lg"
+      class="w-full cursor-pointer text-center text-white font-semibold mt-2 bg-blue-500 py-2 px-3 rounded-b-lg"
       >Login via Phone</span
     >
   </div>
