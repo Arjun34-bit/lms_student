@@ -135,7 +135,7 @@ onMounted(() => {
 
   console.log(import.meta.env.PUBLIC_MEDIASOUP_SOCKET_URL);
 
-  socket.value = io(import.meta.env.PUBLIC_MEDIASOUP_SOCKET_URL);
+  socket.value = io(import.meta.env.PROD_PUBLIC_MEDIASOUP_SOCKET_URL);
 
   console.log("Socket.IO instance created:", socket.value);
 
